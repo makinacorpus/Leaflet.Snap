@@ -1,7 +1,7 @@
 Leaflet.Snap
 ============
 
-Enable snapping between layers !
+Enables snapping of draggable markers to polylines and other layers !
 
 Check out the [demo](http://makinacorpus.github.com/Leaflet.Snap/) !
 
