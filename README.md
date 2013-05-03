@@ -14,6 +14,8 @@ For Polyline edition snapping it also depends on [Leaflet.draw](https://github.c
 Usage
 -----
 
+* Add ``leaflet.snap.js`` and ``leaflet.geometryutil.js`` (optionally ``leaflet.draw.js`` for polyline edition)
+
 For markers : 
 
 ```javascript
@@ -37,9 +39,9 @@ For polylines :
 
 Events:
 
-**snap** (//layer//, //latlng//) : fired when snapped to ``layer`` at ``latlng``
+**snap** ( _layer_, _latlng_ ) : fired when snapped to ``layer`` at ``latlng``
 
-**unsnap** (//layer//) : fired when unsnapped from ``layer``
+**unsnap** ( _layer_ ) : fired when unsnapped from ``layer``
 
 
 TODO
