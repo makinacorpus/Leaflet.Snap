@@ -113,7 +113,7 @@ L.Handler.PolylineSnap = L.Edit.Poly.extend({
     },
 
     addGuideLayer: function (layer) {
-        this._snapper.addGuideLayer(guides);
+        this._snapper.addGuideLayer(layer);
     },
 
     _createMarker: function (latlng, index) {
