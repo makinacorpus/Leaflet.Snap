@@ -10,6 +10,7 @@ It depends on [Leaflet.GeometryUtil](https://github.com/makinacorpus/Leaflet.Geo
 
 For Polyline edition snapping it also depends on [Leaflet.draw](https://github.com/Leaflet/Leaflet.draw).
 
+If your guide layer contains several thousands for features, adding the [LayerIndex](https://github.com/makinacorpus/Leaflet.LayerIndex) is recommended, this plugin takes advantage of the spatial index if it is available.
 
 Usage
 -----
