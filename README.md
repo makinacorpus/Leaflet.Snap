@@ -1,7 +1,7 @@
 Leaflet.Snap
 ============
 
-Enable snapping between layers !
+Enables snapping of draggable markers to polylines and other layers !
 
 Check out the [demo](http://makinacorpus.github.com/Leaflet.Snap/) !
 
@@ -10,9 +10,12 @@ It depends on [Leaflet.GeometryUtil](https://github.com/makinacorpus/Leaflet.Geo
 
 For Polyline edition snapping it also depends on [Leaflet.draw](https://github.com/Leaflet/Leaflet.draw).
 
+If your guide layer contains several thousands for features, adding the [LayerIndex](https://github.com/makinacorpus/Leaflet.LayerIndex) is recommended, this plugin takes advantage of the spatial index if it is available.
 
 Usage
 -----
+
+* Add ``leaflet.snap.js`` and ``leaflet.geometryutil.js`` (optionally ``leaflet.draw.js`` for polyline edition)
 
 For markers : 
 
@@ -37,9 +40,9 @@ For polylines :
 
 Events:
 
-**snap** (//layer//, //latlng//) : fired when snapped to ``layer`` at ``latlng``
+**snap** ( _layer_, _latlng_ ) : fired when snapped to ``layer`` at ``latlng``
 
-**unsnap** (//layer//) : fired when unsnapped from ``layer``
+**unsnap** ( _layer_ ) : fired when unsnapped from ``layer``
 
 
 TODO
