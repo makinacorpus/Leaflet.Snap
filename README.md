@@ -29,7 +29,7 @@ For markers :
         marker.snapediting.enable();
 ```
 
-For polylines : 
+For polylines (*requires Leaflet.draw*): 
 
 ```javascript
     var polyline = L.polyline(...).addTo(map);
