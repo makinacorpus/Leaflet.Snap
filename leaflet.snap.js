@@ -22,6 +22,7 @@ L.Handler.MarkerSnap = L.Handler.extend({
                            map.layerPointToLatLng(new L.Point(L.Handler.MarkerSnap.SNAP_DISTANCE, 0)).lat;
         }
         map.on('zoomend', computeBuffer, this);
+        map.whenReady(computeBuffer, this);
         computeBuffer();
     },
 
@@ -50,8 +51,8 @@ L.Handler.MarkerSnap = L.Handler.extend({
     },
 
     addGuideLayer: function (layer) {
-        if ((typeof layer._layers !== 'undefined') &&
-            (typeof layer.searchBuffer != 'function')) {
+        if ((typeof layer._layers !== undefined) &&
+            (typeof layer.searchBuffer !== 'function')) {
             // Guide is a layer group and has no L.LayerIndexMixin (from Leaflet.LayerIndex)
             for (var id in layer._layers) {
                 this.addGuideLayer(layer._layers[id]);
@@ -68,9 +69,10 @@ L.Handler.MarkerSnap = L.Handler.extend({
             snaplist = [];
         for (var i=0, n = this._guides.length; i < n; i++) {
             var guide = this._guides[i];
-            if (typeof guide.searchBuffer == 'function') {
+
+            if (typeof guide.searchBuffer === 'function') {
                 // Search snaplist around mouse
-                snaplist.concat(guide.searchBuffer(latlng, this._buffer));
+                snaplist = snaplist.concat(guide.searchBuffer(latlng, this._buffer));
             }
             else {
                 snaplist.push(guide);

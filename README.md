@@ -45,6 +45,12 @@ Events:
 **unsnap** ( _layer_ ) : fired when unsnapped from ``layer``
 
 
+CHANGELOG
+---------
+
+* Fix Snaping if guide layer has Leaflet.LayerIndex
+
+
 TODO
 ----
 
