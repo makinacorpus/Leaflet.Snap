@@ -51,7 +51,7 @@ L.Handler.MarkerSnap = L.Handler.extend({
     },
 
     addGuideLayer: function (layer) {
-        if ((typeof layer._layers !== undefined) &&
+        if ((layer._layers !== undefined) &&
             (typeof layer.searchBuffer !== 'function')) {
             // Guide is a layer group and has no L.LayerIndexMixin (from Leaflet.LayerIndex)
             for (var id in layer._layers) {
