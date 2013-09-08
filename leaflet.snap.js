@@ -51,26 +51,23 @@ L.Handler.MarkerSnap = L.Handler.extend({
     },
 
     addGuideLayer: function (layer) {
-        if ((typeof layer._layers !== undefined) &&
-            (typeof layer.searchBuffer !== 'function')) {
-            // Guide is a layer group and has no L.LayerIndexMixin (from Leaflet.LayerIndex)
-            for (var id in layer._layers) {
-                this.addGuideLayer(layer._layers[id]);
-            }
-        }
-        else {
-            this._guides.push(layer);
-        }
+        this._guides.push(layer);
     },
 
     _snapMarker: function(e) {
         var marker = e.target,
             latlng = marker.getLatLng(),
             snaplist = [];
-        for (var i=0, n = this._guides.length; i < n; i++) {
-            var guide = this._guides[i];
 
-            if (typeof guide.searchBuffer === 'function') {
+        function processGuide(guide) {
+            if ((guide._layers !== undefined) &&
+                (typeof guide.searchBuffer !== 'function')) {
+                // Guide is a layer group and has no L.LayerIndexMixin (from Leaflet.LayerIndex)
+                for (var id in guide._layers) {
+                    processGuide(guide._layers[id]);
+                }
+            }
+            else if (typeof guide.searchBuffer === 'function') {
                 // Search snaplist around mouse
                 snaplist = snaplist.concat(guide.searchBuffer(latlng, this._buffer));
             }
@@ -78,6 +75,12 @@ L.Handler.MarkerSnap = L.Handler.extend({
                 snaplist.push(guide);
             }
         }
+
+        for (var i=0, n = this._guides.length; i < n; i++) {
+            var guide = this._guides[i];
+            processGuide(guide);
+        }
+
         var closest = L.GeometryUtil.closestLayerSnap(this._map, snaplist, latlng, L.Handler.MarkerSnap.SNAP_DISTANCE, true);
         closest = closest || {layer: null, latlng: null};
         this._updateSnap(marker, closest.layer, closest.latlng);
