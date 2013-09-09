@@ -105,7 +105,7 @@ L.Handler.MarkerSnap = L.Handler.extend({
 
 
 L.Edit = L.Edit || {};
-L.Edit.Poly = L.Edit.Poly || {};
+L.Edit.Poly = L.Edit.Poly || { extend: function () {} };
 
 L.Handler.PolylineSnap = L.Edit.Poly.extend({
 
