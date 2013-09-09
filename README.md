@@ -59,4 +59,7 @@ TODO
 Authors
 -------
 
+* Mathieu Leplatre
+* Tobias Bieniek
+
 [![Makina Corpus](http://depot.makina-corpus.org/public/logo.gif)](http://makinacorpus.com)
