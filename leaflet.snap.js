@@ -46,7 +46,7 @@ L.Handler.MarkerSnap = L.Handler.extend({
     },
 
     unwatchMarker: function (marker) {
-        marker.off('move', this._snapMarker);
+        marker.off('move', this._snapMarker, this);
         delete marker['snap'];
     },
 
