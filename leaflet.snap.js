@@ -1,12 +1,22 @@
 L.Handler.MarkerSnap = L.Handler.extend({
-    statics: {
-        SNAP_DISTANCE: 15  // in pixels
+    options: {
+        snapDistance: 15, // in pixels
+        snapVertices: true
     },
 
-    initialize: function (map, marker) {
+    initialize: function (map, marker, options) {
         L.Handler.prototype.initialize.call(this, map);
         this._markers = [];
         this._guides = [];
+
+        if (arguments.length == 2) {
+            if (!(marker instanceof L.Class)) {
+                options = marker;
+                marker = null;
+            }
+        }
+
+        L.Util.setOptions(this, options || {});
 
         if (marker) {
             // new markers should be draggable !
@@ -15,15 +25,15 @@ L.Handler.MarkerSnap = L.Handler.extend({
             this.watchMarker(marker);
         }
 
-        // Convert SNAP_DISTANCE in pixels into buffer in degres, for searching around mouse
+        // Convert snap distance in pixels into buffer in degres, for searching around mouse
         // It changes at each zoom change.
         function computeBuffer() {
             this._buffer = map.layerPointToLatLng(new L.Point(0,0)).lat -
-                           map.layerPointToLatLng(new L.Point(L.Handler.MarkerSnap.SNAP_DISTANCE, 0)).lat;
+                           map.layerPointToLatLng(new L.Point(this.options.snapDistance, 0)).lat;
         }
         map.on('zoomend', computeBuffer, this);
         map.whenReady(computeBuffer, this);
-        computeBuffer();
+        computeBuffer.call(this);
     },
 
     enable: function () {
@@ -81,7 +91,11 @@ L.Handler.MarkerSnap = L.Handler.extend({
             processGuide(guide);
         }
 
-        var closest = L.GeometryUtil.closestLayerSnap(this._map, snaplist, latlng, L.Handler.MarkerSnap.SNAP_DISTANCE, true);
+        var closest = L.GeometryUtil.closestLayerSnap(this._map,
+                                                      snaplist,
+                                                      latlng,
+                                                      this.options.snapDistance,
+                                                      this.options.snapVertices);
         closest = closest || {layer: null, latlng: null};
         this._updateSnap(marker, closest.layer, closest.latlng);
     },
@@ -114,7 +128,7 @@ L.Handler.PolylineSnap = L.Edit.Poly.extend({
 
     initialize: function (map, poly, options) {
         L.Edit.Poly.prototype.initialize.call(this, poly, options);
-        this._snapper = new L.Handler.MarkerSnap(map);
+        this._snapper = new L.Handler.MarkerSnap(map, options);
     },
 
     addGuideLayer: function (layer) {
