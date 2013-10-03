@@ -88,7 +88,7 @@ L.Handler.MarkerSnap = L.Handler.extend({
 
         for (var i=0, n = this._guides.length; i < n; i++) {
             var guide = this._guides[i];
-            processGuide(guide);
+            processGuide.call(this, guide);
         }
 
         var closest = L.GeometryUtil.closestLayerSnap(this._map,
