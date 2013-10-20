@@ -159,7 +159,8 @@ L.Handler.PolylineSnap = L.Edit.Poly.extend({
 });
 
 
-var __Draw_Polyline_addHooks = L.Draw.Polyline.prototype.addHooks;
+var __Draw_Polyline_addHooks = L.Draw.Polyline.prototype.addHooks,
+    __Draw_Polyline_removeHooks = L.Draw.Polyline.prototype.removeHooks;
 
 L.Draw.Polyline.include({
     addHooks: function () {
@@ -178,7 +179,7 @@ L.Draw.Polyline.include({
                 var marker = this._mouseMarker;
                 this._snapper.watchMarker(marker);
 
-                // Show marker when snap for user feedback
+                // Show marker when (snap for user feedback)
                 var icon = marker.options.icon;
                 marker.on('snap', function (e) {
                           marker.setIcon(this.options.icon);
@@ -190,7 +191,14 @@ L.Draw.Polyline.include({
                       }, this);
             }
         }
+    },
 
+    removeHooks: function () {
+        this._snapper.unwatchMarker(this._mouseMarker);
+
+        delete this._snapper;
+
+        __Draw_Polyline_removeHooks.call(this);
     }
 });
 
