@@ -173,7 +173,19 @@ L.Draw.Polyline.include({
             }
 
             if (this._mouseMarker) {
-                this._snapper.watchMarker(this._mouseMarker);
+                var marker = this._mouseMarker;
+                this._snapper.watchMarker(marker);
+
+                // Show marker when snap for user feedback
+                var icon = marker.options.icon;
+                marker.on('snap', function (e) {
+                          marker.setIcon(this.options.icon);
+                          marker.setOpacity(1);
+                      }, this)
+                      .on('unsnap', function (e) {
+                          marker.setIcon(icon);
+                          marker.setOpacity(0);
+                      }, this);
             }
         }
 
