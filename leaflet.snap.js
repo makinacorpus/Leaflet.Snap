@@ -1,3 +1,5 @@
+(function () {
+
 L.Handler.MarkerSnap = L.Handler.extend({
     options: {
         snapDistance: 15, // in pixels
@@ -121,8 +123,11 @@ L.Handler.MarkerSnap = L.Handler.extend({
 });
 
 
-L.Edit = L.Edit || {};
-L.Edit.Poly = L.Edit.Poly || { extend: function () {} };
+if (!L.Edit.Poly) {
+    // Leaflet.Draw not available.
+    return;
+}
+
 
 L.Handler.PolylineSnap = L.Edit.Poly.extend({
 
@@ -153,3 +158,4 @@ L.Handler.PolylineSnap = L.Edit.Poly.extend({
     }
 });
 
+})();
