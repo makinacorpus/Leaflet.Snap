@@ -139,7 +139,7 @@ L.Handler.PolylineSnap = L.Edit.Poly.extend({
         var marker = L.Edit.Poly.prototype._createMarker.call(this, latlng, index);
 
         // Treat middle markers differently
-        var isMiddle = arguments.callee.caller.toString().indexOf('_getMiddleLatLng') != -1;
+        var isMiddle = index === undefined;
         if (isMiddle) {
             // Snap middle markers, only once they were touched
             marker.on('dragstart', function () {
