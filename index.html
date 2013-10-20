@@ -85,7 +85,11 @@
             road.snapediting._markerGroup._layers[m].fire('move');
         }
 
-        map.drawControl.setDrawingOptions({polyline: {guideLayer: guides }});
+        map.drawControl.setDrawingOptions({
+            polyline: {
+                guideLayers: [guides, road]
+            }
+        });
     </script>
 </body>
 </html>

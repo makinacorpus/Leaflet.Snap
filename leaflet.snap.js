@@ -165,11 +165,13 @@ L.Draw.Polyline.include({
     addHooks: function () {
         __Draw_Polyline_addHooks.call(this);
 
-        if (this.options.guideLayer) {
+        if (this.options.guideLayers) {
 
             if (!this._snapper) {
                 this._snapper = new L.Handler.MarkerSnap(this._map);
-                this._snapper.addGuideLayer(this.options.guideLayer);
+
+                for (var i=0, n=this.options.guideLayers.length; i<n; i++)
+                    this._snapper.addGuideLayer(this.options.guideLayers[i]);
             }
 
             if (this._mouseMarker) {
