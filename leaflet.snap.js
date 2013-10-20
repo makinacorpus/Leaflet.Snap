@@ -158,4 +158,26 @@ L.Handler.PolylineSnap = L.Edit.Poly.extend({
     }
 });
 
+
+var __Draw_Polyline_addHooks = L.Draw.Polyline.prototype.addHooks;
+
+L.Draw.Polyline.include({
+    addHooks: function () {
+        __Draw_Polyline_addHooks.call(this);
+
+        if (this.options.guideLayer) {
+
+            if (!this._snapper) {
+                this._snapper = new L.Handler.MarkerSnap(this._map);
+                this._snapper.addGuideLayer(this.options.guideLayer);
+            }
+
+            if (this._mouseMarker) {
+                this._snapper.watchMarker(this._mouseMarker);
+            }
+        }
+
+    }
+});
+
 })();
