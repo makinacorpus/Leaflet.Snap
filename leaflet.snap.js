@@ -1,12 +1,22 @@
 L.Handler.MarkerSnap = L.Handler.extend({
-    statics: {
-        SNAP_DISTANCE: 15  // in pixels
+    options: {
+        snapDistance: 15, // in pixels
+        snapVertices: true
     },
 
-    initialize: function (map, marker) {
+    initialize: function (map, marker, options) {
         L.Handler.prototype.initialize.call(this, map);
         this._markers = [];
         this._guides = [];
+
+        if (arguments.length == 2) {
+            if (!(marker instanceof L.Class)) {
+                options = marker;
+                marker = null;
+            }
+        }
+
+        L.Util.setOptions(this, options || {});
 
         if (marker) {
             // new markers should be draggable !
@@ -15,14 +25,15 @@ L.Handler.MarkerSnap = L.Handler.extend({
             this.watchMarker(marker);
         }
 
-        // Convert SNAP_DISTANCE in pixels into buffer in degres, for searching around mouse
+        // Convert snap distance in pixels into buffer in degres, for searching around mouse
         // It changes at each zoom change.
         function computeBuffer() {
             this._buffer = map.layerPointToLatLng(new L.Point(0,0)).lat -
-                           map.layerPointToLatLng(new L.Point(L.Handler.MarkerSnap.SNAP_DISTANCE, 0)).lat;
+                           map.layerPointToLatLng(new L.Point(this.options.snapDistance, 0)).lat;
         }
         map.on('zoomend', computeBuffer, this);
-        computeBuffer();
+        map.whenReady(computeBuffer, this);
+        computeBuffer.call(this);
     },
 
     enable: function () {
@@ -45,38 +56,46 @@ L.Handler.MarkerSnap = L.Handler.extend({
     },
 
     unwatchMarker: function (marker) {
-        marker.off('move', this._snapMarker);
+        marker.off('move', this._snapMarker, this);
         delete marker['snap'];
     },
 
     addGuideLayer: function (layer) {
-        if ((typeof layer._layers !== 'undefined') &&
-            (typeof layer.searchBuffer != 'function')) {
-            // Guide is a layer group and has no L.LayerIndexMixin (from Leaflet.LayerIndex)
-            for (var id in layer._layers) {
-                this.addGuideLayer(layer._layers[id]);
-            }
-        }
-        else {
-            this._guides.push(layer);
-        }
+        this._guides.push(layer);
     },
 
     _snapMarker: function(e) {
         var marker = e.target,
             latlng = marker.getLatLng(),
             snaplist = [];
-        for (var i=0, n = this._guides.length; i < n; i++) {
-            var guide = this._guides[i];
-            if (typeof guide.searchBuffer == 'function') {
+
+        function processGuide(guide) {
+            if ((guide._layers !== undefined) &&
+                (typeof guide.searchBuffer !== 'function')) {
+                // Guide is a layer group and has no L.LayerIndexMixin (from Leaflet.LayerIndex)
+                for (var id in guide._layers) {
+                    processGuide(guide._layers[id]);
+                }
+            }
+            else if (typeof guide.searchBuffer === 'function') {
                 // Search snaplist around mouse
-                snaplist.concat(guide.searchBuffer(latlng, this._buffer));
+                snaplist = snaplist.concat(guide.searchBuffer(latlng, this._buffer));
             }
             else {
                 snaplist.push(guide);
             }
         }
-        var closest = L.GeometryUtil.closestLayerSnap(this._map, snaplist, latlng, L.Handler.MarkerSnap.SNAP_DISTANCE, true);
+
+        for (var i=0, n = this._guides.length; i < n; i++) {
+            var guide = this._guides[i];
+            processGuide.call(this, guide);
+        }
+
+        var closest = L.GeometryUtil.closestLayerSnap(this._map,
+                                                      snaplist,
+                                                      latlng,
+                                                      this.options.snapDistance,
+                                                      this.options.snapVertices);
         closest = closest || {layer: null, latlng: null};
         this._updateSnap(marker, closest.layer, closest.latlng);
     },
@@ -103,13 +122,13 @@ L.Handler.MarkerSnap = L.Handler.extend({
 
 
 L.Edit = L.Edit || {};
-L.Edit.Poly = L.Edit.Poly || {};
+L.Edit.Poly = L.Edit.Poly || { extend: function () {} };
 
 L.Handler.PolylineSnap = L.Edit.Poly.extend({
 
     initialize: function (map, poly, options) {
         L.Edit.Poly.prototype.initialize.call(this, poly, options);
-        this._snapper = new L.Handler.MarkerSnap(map);
+        this._snapper = new L.Handler.MarkerSnap(map, options);
     },
 
     addGuideLayer: function (layer) {

@@ -17,7 +17,7 @@ Usage
 
 * Add ``leaflet.snap.js`` and ``leaflet.geometryutil.js`` (optionally ``leaflet.draw.js`` for polyline edition)
 
-For markers : 
+For markers :
 
 ```javascript
 
@@ -29,7 +29,7 @@ For markers :
         marker.snapediting.enable();
 ```
 
-For polylines : 
+For polylines (*requires Leaflet.draw*):
 
 ```javascript
     var polyline = L.polyline(...).addTo(map);
@@ -38,11 +38,28 @@ For polylines :
         polyline.snapediting.enable();
 ```
 
+
+Both ``L.Handler.MarkerSnap`` and ``L.Handler.PolylineSnap`` accept options as a third
+argument.
+
+Options:
+
+**snapDistance** : (default 30) distance in pixels where snapping occurs
+
+**snapVertices** : (default true) whether layers vertices add additional snap attraction
+
+
 Events:
 
 **snap** ( _layer_, _latlng_ ) : fired when snapped to ``layer`` at ``latlng``
 
 **unsnap** ( _layer_ ) : fired when unsnapped from ``layer``
+
+
+CHANGELOG
+---------
+
+* Fix Snaping if guide layer has Leaflet.LayerIndex
 
 
 TODO
@@ -52,5 +69,8 @@ TODO
 
 Authors
 -------
+
+* Mathieu Leplatre
+* Tobias Bieniek
 
 [![Makina Corpus](http://depot.makina-corpus.org/public/logo.gif)](http://makinacorpus.com)
