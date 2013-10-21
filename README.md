@@ -8,16 +8,16 @@ Check out the [demo](http://makinacorpus.github.com/Leaflet.Snap/) !
 
 It depends on [Leaflet.GeometryUtil](https://github.com/makinacorpus/Leaflet.GeometryUtil).
 
-For Polyline edition snapping it also depends on [Leaflet.draw](https://github.com/Leaflet/Leaflet.draw).
+For snapping on shape drawing or edition snapping, it also depends on [Leaflet.draw](https://github.com/Leaflet/Leaflet.draw).
 
 If your guide layer contains several thousands for features, adding the [LayerIndex](https://github.com/makinacorpus/Leaflet.LayerIndex) is recommended, this plugin takes advantage of the spatial index if it is available.
 
 Usage
 -----
 
-* Add ``leaflet.snap.js`` and ``leaflet.geometryutil.js`` (optionally ``leaflet.draw.js`` for polyline edition)
+* Add ``leaflet.snap.js`` and ``leaflet.geometryutil.js`` (optionally ``leaflet.draw.js``)
 
-For markers :
+### For markers :
 
 ```javascript
 
@@ -29,7 +29,19 @@ For markers :
         marker.snapediting.enable();
 ```
 
-For polylines (*requires Leaflet.draw*):
+### For Leaflet.Draw :
+
+```javascript
+
+    var guideLayers = [guides, road];
+
+    map.drawControl.setDrawingOptions({
+        polyline: { guideLayers: guideLayers },
+        polygon: { guideLayers: guideLayers, snapDistance: 5 },
+    });
+```
+
+### For editing existing polylines :
 
 ```javascript
     var polyline = L.polyline(...).addTo(map);
@@ -38,18 +50,16 @@ For polylines (*requires Leaflet.draw*):
         polyline.snapediting.enable();
 ```
 
-
 Both ``L.Handler.MarkerSnap`` and ``L.Handler.PolylineSnap`` accept options as a third
 argument.
 
-Options:
+### Options:
 
 **snapDistance** : (default 30) distance in pixels where snapping occurs
 
 **snapVertices** : (default true) whether layers vertices add additional snap attraction
 
-
-Events:
+### Events :
 
 **snap** ( _layer_, _latlng_ ) : fired when snapped to ``layer`` at ``latlng``
 
@@ -58,6 +68,12 @@ Events:
 
 CHANGELOG
 ---------
+
+### dev
+
+* Add snapping while drawing in Leaflet.Draw
+
+### 0.0.1
 
 * Fix Snaping if guide layer has Leaflet.LayerIndex
 
