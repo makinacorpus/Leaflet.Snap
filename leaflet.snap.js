@@ -203,6 +203,16 @@ L.Draw.Polyline.include({
                   marker.setIcon(icon);
                   marker.setOpacity(0);
               }, this);
+
+        marker.on('click', this._snap_on_click, this);
+    },
+
+    _snap_on_click: function () {
+        var markerCount = this._markers.length,
+            marker = this._markers[markerCount - 1];
+        if (this._mouseMarker.snap) {
+            L.DomUtil.addClass(marker._icon, 'marker-snapped');
+        }
     },
 
     _snap_on_disabled: function () {
