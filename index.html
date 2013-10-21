@@ -85,10 +85,13 @@
             road.snapediting._markerGroup._layers[m].fire('move');
         }
 
+
+        var guideLayers = [guides, road];
+
         map.drawControl.setDrawingOptions({
-            polyline: {
-                guideLayers: [guides, road]
-            }
+            polyline: { guideLayers: guideLayers },
+            polygon: { guideLayers: guideLayers },
+            marker: { guideLayers: guideLayers },
         });
     </script>
 </body>
