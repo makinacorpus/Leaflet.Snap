@@ -92,6 +92,8 @@
             polyline: { guideLayers: guideLayers },
             polygon: { guideLayers: guideLayers, snapDistance: 5 },
             marker: { guideLayers: guideLayers, snapVertices: false },
+            rectangle: false,
+            circle: false
         });
 
         map.on('draw:created', function (e) {
