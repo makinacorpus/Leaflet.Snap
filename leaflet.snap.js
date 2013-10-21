@@ -1,3 +1,5 @@
+(function () {
+
 L.Handler.MarkerSnap = L.Handler.extend({
     options: {
         snapDistance: 15, // in pixels
@@ -61,6 +63,9 @@ L.Handler.MarkerSnap = L.Handler.extend({
     },
 
     addGuideLayer: function (layer) {
+        for (var i=0, n=this._guides.length; i<n; i++)
+            if (L.stamp(layer) === L.stamp(this._guides[i]))
+                return;
         this._guides.push(layer);
     },
 
@@ -121,8 +126,11 @@ L.Handler.MarkerSnap = L.Handler.extend({
 });
 
 
-L.Edit = L.Edit || {};
-L.Edit.Poly = L.Edit.Poly || { extend: function () {} };
+if (!L.Edit.Poly) {
+    // Leaflet.Draw not available.
+    return;
+}
+
 
 L.Handler.PolylineSnap = L.Edit.Poly.extend({
 
@@ -139,7 +147,7 @@ L.Handler.PolylineSnap = L.Edit.Poly.extend({
         var marker = L.Edit.Poly.prototype._createMarker.call(this, latlng, index);
 
         // Treat middle markers differently
-        var isMiddle = arguments.callee.caller.toString().indexOf('_getMiddleLatLng') != -1;
+        var isMiddle = index === undefined;
         if (isMiddle) {
             // Snap middle markers, only once they were touched
             marker.on('dragstart', function () {
@@ -153,3 +161,69 @@ L.Handler.PolylineSnap = L.Edit.Poly.extend({
     }
 });
 
+
+L.Draw.Feature.SnapMixin = {
+    _snap_initialize: function () {
+        this.on('enabled', this._snap_on_enabled, this);
+        this.on('disabled', this._snap_on_disabled, this);
+    },
+
+    _snap_on_enabled: function () {
+        if (!this.options.guideLayers) {
+            return;
+        }
+
+        if (!this._mouseMarker) {
+            return;
+        }
+
+        if (!this._snapper) {
+            this._snapper = new L.Handler.MarkerSnap(this._map);
+            if (this.options.snapDistance) {
+                this._snapper.options.snapDistance = this.options.snapDistance;
+            }
+            if (this.options.snapVertices) {
+                this._snapper.options.snapVertices = this.options.snapVertices;
+            }
+        }
+
+        for (var i=0, n=this.options.guideLayers.length; i<n; i++)
+            this._snapper.addGuideLayer(this.options.guideLayers[i]);
+
+        var marker = this._mouseMarker;
+
+        this._snapper.watchMarker(marker);
+
+        // Show marker when (snap for user feedback)
+        var icon = marker.options.icon;
+        marker.on('snap', function (e) {
+                  marker.setIcon(this.options.icon);
+                  marker.setOpacity(1);
+              }, this)
+              .on('unsnap', function (e) {
+                  marker.setIcon(icon);
+                  marker.setOpacity(0);
+              }, this);
+
+        marker.on('click', this._snap_on_click, this);
+    },
+
+    _snap_on_click: function () {
+        if (this._markers) {
+            var markerCount = this._markers.length,
+                marker = this._markers[markerCount - 1];
+            if (this._mouseMarker.snap) {
+                L.DomUtil.addClass(marker._icon, 'marker-snapped');
+            }
+        }
+    },
+
+    _snap_on_disabled: function () {
+        delete this._snapper;
+    },
+};
+
+L.Draw.Feature.include(L.Draw.Feature.SnapMixin);
+L.Draw.Feature.addInitHook('_snap_initialize');
+
+})();

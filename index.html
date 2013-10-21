@@ -4,6 +4,7 @@
     <title>Leaflet.Snap</title>
 
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+    <link rel="stylesheet" href="Leaflet.draw/dist/leaflet.draw.css" />
 
     <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
     <script src="Leaflet.draw/dist/leaflet.draw.js"></script>
@@ -54,7 +55,7 @@
             attribution: 'Map data &copy; 2013 OpenStreetMap contributors',
         });
 
-        var map = L.map('map')
+        var map = L.map('map', { drawControl: true })
                    .setView([48.49, 1.4], 16)
                    .addLayer(osm);
 
@@ -64,8 +65,6 @@
                 color: 'red',
                 opacity: 1.0
             }).addTo(map);
-
-
 
         var marker = L.marker([48.488, 1.395]).addTo(map);
         marker.snapediting = new L.Handler.MarkerSnap(map, marker);
@@ -85,6 +84,21 @@
         for (var m in road.snapediting._markerGroup._layers) {
             road.snapediting._markerGroup._layers[m].fire('move');
         }
+
+
+        var guideLayers = [guides, road];
+
+        map.drawControl.setDrawingOptions({
+            polyline: { guideLayers: guideLayers },
+            polygon: { guideLayers: guideLayers, snapDistance: 5 },
+            marker: { guideLayers: guideLayers, snapVertices: false },
+        });
+
+        map.on('draw:created', function (e) {
+            var layer = e.layer;
+            map.addLayer(layer);
+            guideLayers.push(layer);
+        });
     </script>
 </body>
 </html>
