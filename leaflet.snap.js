@@ -194,9 +194,10 @@ L.Draw.Polyline.include({
     },
 
     removeHooks: function () {
-        this._snapper.unwatchMarker(this._mouseMarker);
-
-        delete this._snapper;
+        if (this._snapper) {
+            this._snapper.unwatchMarker(this._mouseMarker);
+            delete this._snapper;
+        }
 
         __Draw_Polyline_removeHooks.call(this);
     }
