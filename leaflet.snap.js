@@ -162,7 +162,7 @@ L.Handler.PolylineSnap = L.Edit.Poly.extend({
 });
 
 
-L.Draw.Polyline.include({
+L.Draw.Feature.SnapMixin = {
     _snap_initialize: function () {
         this.on('enabled', this._snap_on_enabled, this);
         this.on('disabled', this._snap_on_disabled, this);
@@ -208,18 +208,21 @@ L.Draw.Polyline.include({
     },
 
     _snap_on_click: function () {
-        var markerCount = this._markers.length,
-            marker = this._markers[markerCount - 1];
-        if (this._mouseMarker.snap) {
-            L.DomUtil.addClass(marker._icon, 'marker-snapped');
+        if (this._markers) {
+            var markerCount = this._markers.length,
+                marker = this._markers[markerCount - 1];
+            if (this._mouseMarker.snap) {
+                L.DomUtil.addClass(marker._icon, 'marker-snapped');
+            }
         }
     },
 
     _snap_on_disabled: function () {
         delete this._snapper;
     },
-});
+};
 
-L.Draw.Polyline.addInitHook('_snap_initialize');
+L.Draw.Feature.include(L.Draw.Feature.SnapMixin);
+L.Draw.Feature.addInitHook('_snap_initialize');
 
 })();
