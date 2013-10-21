@@ -159,48 +159,46 @@ L.Handler.PolylineSnap = L.Edit.Poly.extend({
 });
 
 
-var __Draw_Polyline_addHooks = L.Draw.Polyline.prototype.addHooks,
-    __Draw_Polyline_removeHooks = L.Draw.Polyline.prototype.removeHooks;
-
 L.Draw.Polyline.include({
-    addHooks: function () {
-        __Draw_Polyline_addHooks.call(this);
+    _snap_initialize: function () {
+        this.on('enabled', this._snap_on_enabled, this);
+        this.on('disabled', this._snap_on_disabled, this);
+    },
 
-        if (this.options.guideLayers) {
+    _snap_on_enabled: function () {
+        if (!this.options.guideLayers) {
+            return;
+        }
 
-            if (!this._snapper) {
-                this._snapper = new L.Handler.MarkerSnap(this._map);
+        if (!this._snapper) {
+            this._snapper = new L.Handler.MarkerSnap(this._map);
 
-                for (var i=0, n=this.options.guideLayers.length; i<n; i++)
-                    this._snapper.addGuideLayer(this.options.guideLayers[i]);
-            }
+            for (var i=0, n=this.options.guideLayers.length; i<n; i++)
+                this._snapper.addGuideLayer(this.options.guideLayers[i]);
+        }
 
-            if (this._mouseMarker) {
-                var marker = this._mouseMarker;
-                this._snapper.watchMarker(marker);
+        if (this._mouseMarker) {
+            var marker = this._mouseMarker;
+            this._snapper.watchMarker(marker);
 
-                // Show marker when (snap for user feedback)
-                var icon = marker.options.icon;
-                marker.on('snap', function (e) {
-                          marker.setIcon(this.options.icon);
-                          marker.setOpacity(1);
-                      }, this)
-                      .on('unsnap', function (e) {
-                          marker.setIcon(icon);
-                          marker.setOpacity(0);
-                      }, this);
-            }
+            // Show marker when (snap for user feedback)
+            var icon = marker.options.icon;
+            marker.on('snap', function (e) {
+                      marker.setIcon(this.options.icon);
+                      marker.setOpacity(1);
+                  }, this)
+                  .on('unsnap', function (e) {
+                      marker.setIcon(icon);
+                      marker.setOpacity(0);
+                  }, this);
         }
     },
 
-    removeHooks: function () {
-        if (this._snapper) {
-            this._snapper.unwatchMarker(this._mouseMarker);
-            delete this._snapper;
-        }
-
-        __Draw_Polyline_removeHooks.call(this);
-    }
+    _snap_on_disabled: function () {
+        delete this._snapper;
+    },
 });
+
+L.Draw.Polyline.addInitHook('_snap_initialize');
 
 })();
