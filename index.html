@@ -91,7 +91,7 @@
         map.drawControl.setDrawingOptions({
             polyline: { guideLayers: guideLayers },
             polygon: { guideLayers: guideLayers, snapDistance: 5 },
-            marker: { guideLayers: guideLayers },
+            marker: { guideLayers: guideLayers, snapVertices: false },
         });
 
         map.on('draw:created', function (e) {

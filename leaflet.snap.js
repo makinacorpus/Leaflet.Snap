@@ -180,9 +180,10 @@ L.Draw.Feature.SnapMixin = {
         if (!this._snapper) {
             this._snapper = new L.Handler.MarkerSnap(this._map);
             if (this.options.snapDistance) {
-                L.Util.setOptions(this._snapper, {
-                    snapDistance: this.options.snapDistance
-                });
+                this._snapper.options.snapDistance = this.options.snapDistance;
+            }
+            if (this.options.snapVertices) {
+                this._snapper.options.snapVertices = this.options.snapVertices;
             }
         }
 
