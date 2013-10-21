@@ -179,12 +179,18 @@ L.Draw.Polyline.include({
 
         if (!this._snapper) {
             this._snapper = new L.Handler.MarkerSnap(this._map);
+            if (this.options.snapDistance) {
+                L.Util.setOptions(this._snapper, {
+                    snapDistance: this.options.snapDistance
+                });
+            }
         }
 
         for (var i=0, n=this.options.guideLayers.length; i<n; i++)
             this._snapper.addGuideLayer(this.options.guideLayers[i]);
 
         var marker = this._mouseMarker;
+
         this._snapper.watchMarker(marker);
 
         // Show marker when (snap for user feedback)
