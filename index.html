@@ -93,6 +93,12 @@
             polygon: { guideLayers: guideLayers },
             marker: { guideLayers: guideLayers },
         });
+
+        map.on('draw:created', function (e) {
+            var layer = e.layer;
+            map.addLayer(layer);
+            guideLayers.push(layer);
+        });
     </script>
 </body>
 </html>

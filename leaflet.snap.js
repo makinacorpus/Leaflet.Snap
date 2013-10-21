@@ -63,6 +63,9 @@ L.Handler.MarkerSnap = L.Handler.extend({
     },
 
     addGuideLayer: function (layer) {
+        for (var i=0, n=this._guides.length; i<n; i++)
+            if (L.stamp(layer) === L.stamp(this._guides[i]))
+                return;
         this._guides.push(layer);
     },
 
@@ -170,28 +173,30 @@ L.Draw.Polyline.include({
             return;
         }
 
+        if (!this._mouseMarker) {
+            return;
+        }
+
         if (!this._snapper) {
             this._snapper = new L.Handler.MarkerSnap(this._map);
-
-            for (var i=0, n=this.options.guideLayers.length; i<n; i++)
-                this._snapper.addGuideLayer(this.options.guideLayers[i]);
         }
 
-        if (this._mouseMarker) {
-            var marker = this._mouseMarker;
-            this._snapper.watchMarker(marker);
+        for (var i=0, n=this.options.guideLayers.length; i<n; i++)
+            this._snapper.addGuideLayer(this.options.guideLayers[i]);
 
-            // Show marker when (snap for user feedback)
-            var icon = marker.options.icon;
-            marker.on('snap', function (e) {
-                      marker.setIcon(this.options.icon);
-                      marker.setOpacity(1);
-                  }, this)
-                  .on('unsnap', function (e) {
-                      marker.setIcon(icon);
-                      marker.setOpacity(0);
-                  }, this);
-        }
+        var marker = this._mouseMarker;
+        this._snapper.watchMarker(marker);
+
+        // Show marker when (snap for user feedback)
+        var icon = marker.options.icon;
+        marker.on('snap', function (e) {
+                  marker.setIcon(this.options.icon);
+                  marker.setOpacity(1);
+              }, this)
+              .on('unsnap', function (e) {
+                  marker.setIcon(icon);
+                  marker.setOpacity(0);
+              }, this);
     },
 
     _snap_on_disabled: function () {
