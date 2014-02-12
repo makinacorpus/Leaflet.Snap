@@ -111,13 +111,13 @@ L.Handler.MarkerSnap = L.Handler.extend({
             marker.update();
             if (marker.snap != layer) {
                 marker.snap = layer;
-                L.DomUtil.addClass(marker._icon, 'marker-snapped');
+                if (marker._icon) L.DomUtil.addClass(marker._icon, 'marker-snapped');
                 marker.fire('snap', {layer:layer, latlng: latlng});
             }
         }
         else {
             if (marker.snap) {
-                L.DomUtil.removeClass(marker._icon, 'marker-snapped');
+                if (marker._icon) L.DomUtil.removeClass(marker._icon, 'marker-snapped');
                 marker.fire('unsnap', {layer:marker.snap});
             }
             delete marker['snap'];
