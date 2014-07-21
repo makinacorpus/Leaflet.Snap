@@ -126,7 +126,7 @@ L.Handler.MarkerSnap = L.Handler.extend({
 });
 
 
-if (!L.Edit.Poly) {
+if (!L.Edit) {
     // Leaflet.Draw not available.
     return;
 }
