@@ -96,13 +96,17 @@ L.Handler.MarkerSnap = L.Handler.extend({
             processGuide.call(this, guide);
         }
 
-        var closest = L.GeometryUtil.closestLayerSnap(this._map,
-                                                      snaplist,
-                                                      latlng,
-                                                      this.options.snapDistance,
-                                                      this.options.snapVertices);
+        var closest = this._findClosestLayerSnap(this._map,
+                                                 snaplist,
+                                                 latlng,
+                                                 this.options.snapDistance,
+                                                 this.options.snapVertices);
         closest = closest || {layer: null, latlng: null};
         this._updateSnap(marker, closest.layer, closest.latlng);
+    },
+
+    _findClosestLayerSnap: function (map, layers, latlng, tolerance, withVertices) {
+        return L.GeometryUtil.closestLayerSnap(map, layers, latlng, tolerance, withVertices);
     },
 
     _updateSnap: function (marker, layer, latlng) {
