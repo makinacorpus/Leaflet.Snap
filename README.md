@@ -55,7 +55,7 @@ argument.
 
 ### Options:
 
-**snapDistance** : (default 30) distance in pixels where snapping occurs
+**snapDistance** : (default 15) distance in pixels where snapping occurs
 
 **snapVertices** : (default true) whether layers vertices add additional snap attraction
 
