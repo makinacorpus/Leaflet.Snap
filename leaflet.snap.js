@@ -178,7 +178,10 @@ L.Draw.Feature.SnapMixin = {
         }
 
         if (!this._mouseMarker) {
+            this._map.on('layeradd', this._snap_on_enabled, this);
             return;
+        }else{
+            this._map.off('layeradd', this._snap_on_enabled, this);
         }
 
         if (!this._snapper) {
