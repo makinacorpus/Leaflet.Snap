@@ -168,11 +168,26 @@ L.Handler.PolylineSnap = L.Edit.Poly.extend({
 
 L.Draw.Feature.SnapMixin = {
     _snap_initialize: function () {
-        this.on('enabled', this._snap_on_enabled, this);
+        this.on('enabled', this._check_for_mouseMarker, this);
         this.on('disabled', this._snap_on_disabled, this);
+    },
+    
+    // snapping only works if the _mouseMarker has been created which is not the case when 'enable' is fired here after Leaflet.Draw 0.2.3
+    _check_for_mouseMarker: function(e) {
+        var markerClassName = '';
+        try{
+          markerClassName = e.layer.options.icon.options.className;
+        }catch(ex){};
+        if(markerClassName == 'leaflet-mouse-marker'){
+          this._snap_on_enabled();
+        }else{
+          this._map.on('layeradd', this._check_for_mouseMarker, this);
+        };
     },
 
     _snap_on_enabled: function () {
+        this._map.off('layeradd', this._check_for_mouseMarker, this);
+        
         if (!this.options.guideLayers) {
             return;
         }
