@@ -139,8 +139,13 @@ if (!L.Edit) {
 L.Handler.PolylineSnap = L.Edit.Poly.extend({
 
     initialize: function (map, poly, options) {
+        var that = this;
+
         L.Edit.Poly.prototype.initialize.call(this, poly, options);
         this._snapper = new L.Handler.MarkerSnap(map, options);
+        poly.on('remove', function() {
+            that.disable();
+        })
     },
 
     addGuideLayer: function (layer) {
