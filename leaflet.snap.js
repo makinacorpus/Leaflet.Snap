@@ -220,11 +220,21 @@ L.Draw.Feature.SnapMixin = {
         marker.on('click', this._snap_on_click, this);
     },
 
-    _snap_on_click: function () {
+    _snap_on_click: function (e) {
         if (this._markers) {
             var markerCount = this._markers.length,
                 marker = this._markers[markerCount - 1];
             if (this._mouseMarker.snap) {
+                if(e){
+                  // update the feature being drawn to reflect the snapped location:
+                  marker.setLatLng(e.target._latlng);
+                  if(this._poly){
+                    var polyPointsCount = this._poly._latlngs.length;
+                    this._poly._latlngs[polyPointsCount - 1] = e.target._latlng;
+                    this._poly.redraw();
+                  }
+                }
+
                 L.DomUtil.addClass(marker._icon, 'marker-snapped');
             }
         }
