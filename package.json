@@ -1,6 +1,6 @@
 {
     "name": "leaflet-snap",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "Enable snapping between layers",
     "keywords": [
         "Leaflet",

@@ -69,9 +69,9 @@ argument.
 CHANGELOG
 ---------
 
-### dev
+### 0.0.3
 
-* Add snapping while drawing in Leaflet.Draw
+* Set the newly drawn point/vertex to the snapped location
 
 ### 0.0.2
 
