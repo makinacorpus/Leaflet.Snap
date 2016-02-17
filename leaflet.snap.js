@@ -142,7 +142,7 @@ L.Handler.PolylineSnap = L.Edit.Poly.extend({
         var that = this;
 
         L.Edit.Poly.prototype.initialize.call(this, poly, options);
-        this._snapper = new L.Handler.MarkerSnap(map, options);
+        this._snapper = new L.Handler.MarkerSnap(map, null, options);
         poly.on('remove', function() {
             that.disable();
         })
