@@ -105,7 +105,12 @@ L.Handler.MarkerSnap = L.Handler.extend({
                                                  latlng,
                                                  this.options.snapDistance,
                                                  this.options.snapVertices);
-        closest = closest || {layer: null, latlng: null};
+
+        // In case the closest feature is the same feature
+        if (!closest || (closest.layer.getLatLng && closest.latlng.equals(closest.layer.getLatLng()))) {
+          closest = {layer: null, latlng: null};
+        }
+        
         this._updateSnap(marker, closest.layer, closest.latlng);
     },
 
