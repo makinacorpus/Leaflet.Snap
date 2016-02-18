@@ -84,9 +84,13 @@ L.Handler.MarkerSnap = L.Handler.extend({
             }
             else if (typeof guide.searchBuffer === 'function') {
                 // Search snaplist around mouse
-                snaplist = snaplist.concat(guide.searchBuffer(latlng, this._buffer));
+                var nearlayers = guide.searchBuffer(latlng, this._buffer);
+                snaplist = snaplist.concat(nearlayers.filter(function(layer) {
+                    return layer._leaflet_id !== marker._leaflet_id;
+                }));
             }
-            else {
+            // Make sure the marker doesn't snap to itself (especiall for editing existing features)
+            else if (guide._leaflet_id !== marker._leaflet_id) {
                 snaplist.push(guide);
             }
         }
@@ -145,7 +149,7 @@ L.Handler.PolylineSnap = L.Edit.Poly.extend({
         this._snapper = new L.Handler.MarkerSnap(map, options);
         poly.on('remove', function() {
             that.disable();
-        })
+        });
     },
 
     addGuideLayer: function (layer) {
