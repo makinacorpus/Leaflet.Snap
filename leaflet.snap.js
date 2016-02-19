@@ -74,6 +74,21 @@ L.Handler.MarkerSnap = L.Handler.extend({
             latlng = marker.getLatLng(),
             snaplist = [];
 
+        function isDifferentLayer(layer) {
+            if (layer.getLatLng) {
+                return marker._leaflet_id !== layer._leaflet_id;
+            } else {
+                if (layer.editing && layer.editing._enabled) {
+                    var points = layer.editing._markerGroup.getLayers();
+                    for(var i = 0, n = points.length; i < n; i++) {
+                        if (points[i]._leaflet_id === marker._leaflet_id) { return false; }
+                    }
+                }
+            }
+
+            return true;
+        }
+
         function processGuide(guide) {
             if ((guide._layers !== undefined) &&
                 (typeof guide.searchBuffer !== 'function')) {
@@ -86,11 +101,11 @@ L.Handler.MarkerSnap = L.Handler.extend({
                 // Search snaplist around mouse
                 var nearlayers = guide.searchBuffer(latlng, this._buffer);
                 snaplist = snaplist.concat(nearlayers.filter(function(layer) {
-                    return !guide.editing || (guide.editing && !guide.editing._enabled);
+                    return isDifferentLayer(layer);
                 }));
             }
             // Make sure the marker doesn't snap to itself or the associated polyline layer
-            else if (!guide.editing || (guide.editing && !guide.editing._enabled)) {
+            else if (isDifferentLayer(guide)) {
                 snaplist.push(guide);
             }
         }
