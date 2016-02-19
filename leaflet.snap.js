@@ -86,11 +86,11 @@ L.Handler.MarkerSnap = L.Handler.extend({
                 // Search snaplist around mouse
                 var nearlayers = guide.searchBuffer(latlng, this._buffer);
                 snaplist = snaplist.concat(nearlayers.filter(function(layer) {
-                    return layer._leaflet_id !== marker._leaflet_id;
+                    return !guide.editing || (guide.editing && !guide.editing._enabled);
                 }));
             }
-            // Make sure the marker doesn't snap to itself (especiall for editing existing features)
-            else if (guide._leaflet_id !== marker._leaflet_id) {
+            // Make sure the marker doesn't snap to itself or the associated polyline layer
+            else if (!guide.editing || (guide.editing && !guide.editing._enabled)) {
                 snaplist.push(guide);
             }
         }
@@ -106,11 +106,7 @@ L.Handler.MarkerSnap = L.Handler.extend({
                                                  this.options.snapDistance,
                                                  this.options.snapVertices);
 
-        // In case the closest feature is the same feature
-        if (!closest || (closest.layer.getLatLng && closest.latlng.equals(closest.layer.getLatLng()))) {
-          closest = {layer: null, latlng: null};
-        }
-        
+        closest = closest || {layer: null, latlng: null};
         this._updateSnap(marker, closest.layer, closest.latlng);
     },
 
