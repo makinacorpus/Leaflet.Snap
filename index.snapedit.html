@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaflet.Snap</title>
+
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw.css" />
+
+    <script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw.js"></script>
+    <script src="https://raw.githubusercontent.com/makinacorpus/Leaflet.GeometryUtil/master/dist/leaflet.geometryutil.js"></script>
+
+    <script src="leaflet.snap.js"></script>
+    <style>
+        #map {
+            position: absolute;
+            top:0;
+            left: 0;
+            right: 0;
+            bottom:0;
+        }
+        .help {
+            font-size: 1.5em;
+            position: absolute;
+            top:0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            z-index: 10;
+            background-color: rgba(0,0,0,0.5);
+            color: white;
+            padding: 10px;
+            margin: 0px;
+            text-align: center;
+        }
+        .help a.sources {
+            float: left;
+            margin-left: 50px;
+            color: white;
+        }
+        .help a.logo {
+            float: right;
+        }
+        .help a.logo img {
+            height: 30px;
+        }
+
+        .leaflet-editing-icon.marker-snapped {
+            background-color: yellow;
+        }
+
+        .leaflet-marker-icon.marker-snapped {
+            content: url('marker-snap.png');
+        }
+    </style>
+</head>
+<body>
+
+    <p class="help">Move stuff around and it will snap !
+      <a class="sources" href="http://github.com/makinacorpus/Leaflet.Snap/">Sources</a>
+      <a class="logo" href="http://makina-corpus.com"><img src="http://depot.makina-corpus.org/public/logo.gif"/></a>
+    </p>
+    <div id="map"></div>
+
+    <script type="text/javascript">
+
+        var osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; 2013 OpenStreetMap contributors',
+        });
+
+        var map = L.map('map', { drawControl: true })
+                   .setView([48.49, 1.4], 16)
+                   .addLayer(osm);
+
+        var guides = L.polyline([[48.505431207150885, 1.3999843597412107], [48.50335551764662, 1.398911476135254], [48.50173471468476, 1.3994693756103516], [48.49974418399956, 1.3991689682006836], [48.49684355649577, 1.3993835449218748], [48.4956206932084, 1.398611068725586], [48.49465375716902, 1.3980531692504883], [48.49419872206354, 1.3975811004638672], [48.492406981637345, 1.3971948623657227], [48.49156797030711, 1.396486759185791], [48.49067206152607, 1.3961219787597656], [48.48988, 1.39638], [48.489342389949364, 1.394963264465332], [48.48864554279267, 1.3944590091705322], [48.487628697617744, 1.3940191268920896], [48.485666057669334, 1.3944482803344727], [48.48541005555473, 1.3942551612854002], [48.48461359626773, 1.3942766189575195], [48.483489998505746, 1.3933539390563965], [48.48164098598135, 1.3928818702697754], [48.480232846617845, 1.3912296295166016], [48.479450530080534, 1.3906073570251463], [48.478511734309954, 1.3902640342712402], [48.47714618217502, 1.389319896697998], [48.47600819398379, 1.388998031616211]],
+            {
+                weight: 5,
+                color: 'red',
+                opacity: 1.0
+            }).addTo(map);
+
+        var marker = L.marker([48.488, 1.395]).addTo(map);
+        var road = L.polyline([[48.48922, 1.40033], [48.48935, 1.39981], [48.48948, 1.3976], [48.48986, 1.39634]],
+                              {color: 'green', opacity: 1.0}).addTo(map);
+
+        var editToolbar = new L.EditToolbar.SnapEdit(map, {
+           featureGroup: L.featureGroup([marker, road]),
+           snapOptions: {
+              guideLayers: [guides]
+           }
+        });
+
+        // We can also use addGuideLayer(layer)
+        // editToolbar.addGuideLayer(guides);
+
+        editToolbar.enable();
+    </script>
+</body>
+</html>

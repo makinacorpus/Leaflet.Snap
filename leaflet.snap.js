@@ -76,12 +76,12 @@ L.Handler.MarkerSnap = L.Handler.extend({
 
         function isDifferentLayer(layer) {
             if (layer.getLatLng) {
-                return marker._leaflet_id !== layer._leaflet_id;
+                return L.stamp(marker) !== L.stamp(layer);
             } else {
                 if (layer.editing && layer.editing._enabled) {
                     var points = layer.editing._markerGroup.getLayers();
                     for(var i = 0, n = points.length; i < n; i++) {
-                        if (points[i]._leaflet_id === marker._leaflet_id) { return false; }
+                        if (L.stamp(points[i]) === L.stamp(marker)) { return false; }
                     }
                 }
             }
@@ -190,6 +190,83 @@ L.Handler.PolylineSnap = L.Edit.Poly.extend({
     }
 });
 
+L.EditToolbar.SnapEdit = L.EditToolbar.Edit.extend({
+    snapOptions: {
+        snapDistance: 15, // in pixels
+        snapVertices: true
+    },
+
+    initialize: function(map, options) {
+        L.EditToolbar.Edit.prototype.initialize.call(this, map, options);
+
+        if (options.snapOptions) {
+            L.Util.extend(this.snapOptions, options.snapOptions);
+        }
+
+        if (Array.isArray(this.snapOptions.guideLayers)) {
+            this._guideLayers = this.snapOptions.guideLayers;
+        } else if (options.guideLayers instanceof L.LayerGroup) {
+            this._guideLayers = this.snapOptions.guideLayers.getLayers();
+        } else {
+            this._guideLayers = [];
+        }
+    },
+
+    addGuideLayer: function(layer) {
+        var index = this._guideLayers.findIndex(function(guideLayer) {
+            return L.stamp(layer) === L.stamp(guideLayer);
+        });
+
+        if (index === -1) {
+            this._guideLayers.push(layer);
+            this._featureGroup.eachLayer(function(layer) {
+                if (layer.snapediting) { layer.snapediting._guides.push(layer); }
+            });
+        }
+    },
+
+    removeGuideLayer: function(layer) {
+      var index = this._guideLayers.findIndex(function(guideLayer) {
+          return L.stamp(layer) === L.stamp(guideLayer);
+      });
+
+      if (index !== -1) {
+          this._guideLayers.splice(index, 1);
+          this._featureGroup.eachLayer(function(layer) {
+              if (layer.snapediting) { layer.snapediting._guides.splice(index, 1); }
+          });
+      }
+    },
+
+    clearGuideLayers: function() {
+        this._guideLayers = [];
+        this._featureGroup.eachLayer(function(layer) {
+            if (layer.snapediting) { layer.snapediting._guides = []; }
+        });
+    },
+
+    _enableLayerEdit: function(e) {
+        L.EditToolbar.Edit.prototype._enableLayerEdit.call(this, e);
+
+        var layer = e.layer || e.target || e;
+
+        if (!layer.snapediting) {
+            if (layer.getLatLng) {
+                layer.snapediting = new L.Handler.MarkerSnap(layer._map, layer, this.snapOptions);
+            } else {
+                if (layer.editing) { layer.editing._markerGroup.clearLayers(); }
+
+                layer.editing = layer.snapediting = new L.Handler.PolylineSnap(layer._map, layer, this.snapOptions);
+            }
+
+            for (var i = 0, n = this._guideLayers.length; i < n; i++) {
+                layer.snapediting.addGuideLayer(this._guideLayers[i]);
+            }
+        }
+
+        layer.snapediting.enable();
+    }
+});
 
 L.Draw.Feature.SnapMixin = {
     _snap_initialize: function () {
