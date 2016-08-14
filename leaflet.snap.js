@@ -254,7 +254,10 @@ L.EditToolbar.SnapEdit = L.EditToolbar.Edit.extend({
             if (layer.getLatLng) {
                 layer.snapediting = new L.Handler.MarkerSnap(layer._map, layer, this.snapOptions);
             } else {
-                if (layer.editing) { layer.editing._markerGroup.clearLayers(); }
+                if (layer.editing) {
+                  layer.editing._markerGroup.clearLayers();
+                  delete layer.editing;
+                }
 
                 layer.editing = layer.snapediting = new L.Handler.PolylineSnap(layer._map, layer, this.snapOptions);
             }
