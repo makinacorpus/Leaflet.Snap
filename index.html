@@ -84,7 +84,6 @@
         marker.snapediting.addGuideLayer(guides);
         marker.snapediting.enable();
 
-
         var road = L.polyline([[48.48922, 1.40033], [48.48935, 1.39981], [48.48948, 1.3976], [48.48986, 1.39634]],
                               {color: 'green', opacity: 1.0}).addTo(map);
 
@@ -98,8 +97,30 @@
             road.snapediting._markerGroup._layers[m].fire('move');
         }
 
+        var road2 = L.polyline([
+          [48.48782, 1.39409],
+          [48.48794, 1.39267],
+          [48.48801, 1.39175],
+          [48.48809, 1.39094],
+          [48.48802, 1.39073]
+        ], {
+          color: 'blue',
+          opacity: 1
+        })
+        .addTo(map);
 
-        var guideLayers = [guides, road];
+        marker.snapediting.addGuideLayer(road2);
+
+        var snapEdit = new L.EditToolbar.SnapEdit(map, {
+          featureGroup: L.featureGroup([road2]),
+          snapOptions: {
+            guideLayers: [guides]
+          }
+        });
+
+        snapEdit.enable();
+
+        var guideLayers = [guides, road, road2];
 
         map.drawControl.setDrawingOptions({
             polyline: { guideLayers: guideLayers },
