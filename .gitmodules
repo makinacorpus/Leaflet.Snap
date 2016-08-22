@@ -1,6 +1,0 @@
-[submodule "Leaflet.GeometryUtil"]
-	path = Leaflet.GeometryUtil
-	url = https://github.com/makinacorpus/Leaflet.GeometryUtil.git
-[submodule "Leaflet.draw"]
-	path = Leaflet.draw
-	url = https://github.com/Leaflet/Leaflet.draw.git

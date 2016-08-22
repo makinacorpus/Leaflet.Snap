@@ -79,7 +79,7 @@ L.Handler.MarkerSnap = L.Handler.extend({
                 return L.stamp(marker) !== L.stamp(layer);
             } else {
                 if (layer.editing && layer.editing._enabled) {
-                    var points = layer.editing._markerGroup.getLayers();
+                    var points = layer.editing._verticesHandlers[0]._markerGroup.getLayers();
                     for(var i = 0, n = points.length; i < n; i++) {
                         if (L.stamp(points[i]) === L.stamp(marker)) { return false; }
                     }
@@ -171,20 +171,29 @@ L.Handler.PolylineSnap = L.Edit.Poly.extend({
     addGuideLayer: function (layer) {
         this._snapper.addGuideLayer(layer);
     },
+    
+    _initHandlers: function () {
+        this._verticesHandlers = [];
+        for (var i = 0; i < this.latlngs.length; i++) {
+            this._verticesHandlers.push(new L.Edit.PolyVerticesEditSnap(this._poly, this.latlngs[i], this.options));
+        }
+    }
+});
 
+L.Edit.PolyVerticesEditSnap = L.Edit.PolyVerticesEdit.extend({
     _createMarker: function (latlng, index) {
-        var marker = L.Edit.Poly.prototype._createMarker.call(this, latlng, index);
+               var marker = L.Edit.PolyVerticesEdit.prototype._createMarker.call(this, latlng, index);
 
         // Treat middle markers differently
         var isMiddle = index === undefined;
         if (isMiddle) {
             // Snap middle markers, only once they were touched
             marker.on('dragstart', function () {
-                this._snapper.watchMarker(marker);
+                this._poly.snapediting._snapper.watchMarker(marker);
             }, this);
         }
         else {
-            this._snapper.watchMarker(marker);
+            this._poly.snapediting._snapper.watchMarker(marker);
         }
         return marker;
     }
@@ -255,7 +264,7 @@ L.EditToolbar.SnapEdit = L.EditToolbar.Edit.extend({
                 layer.snapediting = new L.Handler.MarkerSnap(layer._map, layer, this.snapOptions);
             } else {
                 if (layer.editing) {
-                  layer.editing._markerGroup.clearLayers();
+                  layer.editing._verticesHandlers[0]._markerGroup.clearLayers();
                   delete layer.editing;
                 }
 

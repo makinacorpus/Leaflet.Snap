@@ -4,11 +4,11 @@
     <title>Leaflet.Snap</title>
 
     <link rel="stylesheet" href="//cdn.leafletjs.com/leaflet-0.7/leaflet.css" />
-    <link rel="stylesheet" href="Leaflet.draw/dist/leaflet.draw.css" />
+    <link rel="stylesheet" href="./node_modules/leaflet-draw/dist/leaflet.draw.css" />
 
     <script src="//cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
-    <script src="Leaflet.draw/dist/leaflet.draw.js"></script>
-    <script src="Leaflet.GeometryUtil/dist/leaflet.geometryutil.js"></script>
+    <script src="./node_modules/leaflet-draw/dist/leaflet.draw.js"></script>
+    <script src="./node_modules/leaflet-geometryutil/dist/leaflet.geometryutil.js"></script>
 
     <script src="leaflet.snap.js"></script>
     <style>
@@ -93,8 +93,8 @@
 
         marker.snapediting.addGuideLayer(road);
 
-        for (var m in road.snapediting._markerGroup._layers) {
-            road.snapediting._markerGroup._layers[m].fire('move');
+        for (var m in road.snapediting._verticesHandlers[0]._markerGroup._layers) {
+            road.snapediting._verticesHandlers[0]._markerGroup._layers[m].fire('move');
         }
 
         var road2 = L.polyline([
@@ -110,6 +110,7 @@
         .addTo(map);
 
         marker.snapediting.addGuideLayer(road2);
+        road.snapediting.addGuideLayer(road2);
 
         var snapEdit = new L.EditToolbar.SnapEdit(map, {
           featureGroup: L.featureGroup([road2]),
@@ -118,10 +119,11 @@
           }
         });
 
-        snapEdit.enable();
+        // Enable edit from the EditToolBar idem
+        // snapEdit.enable();
 
         var guideLayers = [guides, road, road2];
-
+        
         map.drawControl.setDrawingOptions({
             polyline: { guideLayers: guideLayers },
             polygon: { guideLayers: guideLayers, snapDistance: 5 },

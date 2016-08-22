@@ -18,10 +18,10 @@
     "scripts": {
     },
     "dependencies": {
-        "leaflet": "*",
+        "leaflet": "^0.7.7",
         "leaflet-geometryutil": "*"
     },
     "optionalDependencies": {
-        "leaflet-draw": "*"
+        "leaflet-draw": "^0.3.2"
     }
 }
