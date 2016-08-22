@@ -87,6 +87,13 @@ editToolbar.enable();
 CHANGELOG
 ---------
 
+### 0.0.4
+
+* Fix to use leaflet-draw ^0.3.0
+* Delete git module and use node module instead
+* Can Snap for 'editing existing polyline with L.EditToolbar.SnapEdit' 
+* Example can be use with http / https
+
 ### 0.0.3
 
 * Set the newly drawn point/vertex to the snapped location
