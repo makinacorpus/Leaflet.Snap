@@ -41,7 +41,7 @@ Usage
     });
 ```
 
-### For editing existing polylines :
+### For editing existing polyline :
 
 ```javascript
     var polyline = L.polyline(...).addTo(map);
@@ -52,6 +52,24 @@ Usage
 
 Both ``L.Handler.MarkerSnap`` and ``L.Handler.PolylineSnap`` accept options as a third
 argument.
+
+### For editing existing polyline with L.EditToolbar.SnapEdit :
+
+L.EditToolbar.SnapEdit is an extension of L.EditToolbar.Edit in Leaflet.draw.
+
+```javascript
+var polyline = L.polyline(...).addTo(map);
+var editToolbar = new L.EditToolbar.SnapEdit(map, {
+   featureGroup: L.featureGroup([polyline]),
+   snapOptions: {
+      guideLayers: [guideLayer]
+   }
+});
+
+editToolbar.enable();
+```
+
+```L.EditToolbar.SnapEdit``` accepts options and initial guide layers.  
 
 ### Options:
 
