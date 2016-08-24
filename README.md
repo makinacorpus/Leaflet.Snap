@@ -12,6 +12,14 @@ For snapping on shape drawing or edition snapping, it also depends on [Leaflet.d
 
 If your guide layer contains several thousands for features, adding the [LayerIndex](https://github.com/makinacorpus/Leaflet.LayerIndex) is recommended, this plugin takes advantage of the spatial index if it is available.
 
+Install
+-----
+In order to use this plugin in your app you can either:
+* install it via your favorite package manager:
+    * `npm i leaflet-snap`
+    * `bower install git@github.com:makinacorpus/Leaflet.Snap.git`
+* download the repository and import the `leaflet.snap.js` file in your app.
+
 Usage
 -----
 
