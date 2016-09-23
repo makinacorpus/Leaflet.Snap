@@ -107,5 +107,3 @@ function takeScreenshot() {
     callPhantom({'screenshot': filename})
   }
 }
-
-// penser à re enleve les http/hhtps
