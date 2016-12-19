@@ -864,7 +864,7 @@ L.Snap.Gridlines =  L.Class.extend({
             return;
         }
         
-        this._enable()
+        this._enable();
     },
     
     _enable: function () {

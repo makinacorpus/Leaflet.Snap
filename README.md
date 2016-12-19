@@ -1,7 +1,7 @@
 Leaflet.Snap
 ============
 
-Enables snapping of draggable markers to polylines and other layers !
+Enables snapping of draggable markers to polylines and other layers ! Now updated to work with Leaflet.Draw for Leaflet 1.0!
 
 Check out the [demo](http://makinacorpus.github.com/Leaflet.Snap/) !
 
@@ -91,6 +91,55 @@ editToolbar.enable();
 
 **unsnap** ( _layer_ ) : fired when unsnapped from ``layer``
 
+
+Leaflet.Snap.Guidelines
+============
+
+L.Snap.Guidelines ia a class that works with Leaflet Draw to draw horizontal and vertical guidelines along all other existing rectangles and circles when in draw or edit mode, and allows the mouse to snap to those lines, to help the user to draw things that line up perfectly despite their being distance between them. Note that other shapes will always have snapping-prioirty over the guidelines.
+
+```var guideLines = new L.Snap.Guidelines(map, guideLayers, {});
+```
+
+### Options:
+
+**guideStyle** : The style of the guidelines, as a hash. By default, we have weight:1, color:black, opacity:0.1, and dashArray: 15, 10, 5.
+    
+### Methods:
+
+**enabled** : as expected.
+**enable** :  as expected.
+**disable** :  as expected.
+
+
+Leaflet.Snap.Gridlines
+============
+
+```var gridlines = new L.Snap.Gridlines(map, guideLayers, {
+    'pixelSpacingX' : 98,
+    'pixelSpacingY' : 98
+    });
+```
+    
+L.Snap.Gridlines draws a grid on the map, and enables L.Snap to snap to its lines. Intersections of NS/WE gridlines will be preferred over sticking to a single line, but other shapes will always have snapping priority over the grid itself. 
+
+### Options:
+            
+**maxBounds** : Specifies the NSWE bounds for the gridlines. If the maxBounds option is not set, the maxBounds on the map itself is used by default.
+
+**numGridlines** -or- **numGridlinesLat**/**numGridlinesLng** -or- **gridSpacingLat**/**gridSpacingLng** -or- **pixelSpacingX**/**pixelSpacingY** : Only one of these options (or pairs of options) should be set. the "num" options specify the number of gridlines to fit in the maxBounds for each direction, calculating their spacing based on the total width/height, while the "spacing" options do the opposite, calculating the number based on the spacing. Spacing also allows one to specify its values in pixel or latlng coordinates.
+    
+**gridStyle** : The style of the gridlines themselves, as a hash. By default, we have weight:1, color:black, and opacity:0.1.
+    
+### Methods:
+
+**enabled** : as expected.
+**enable** :  as expected.
+**disable** :  as expected.
+**disableSnap** : disable snap without changing the show/hide status of the grid.
+**disableSnap** : re-enables snap without changing the show/hide status of the grid.
+**calcDimensions** : redraws the grid with new dimensions; options are the same as the constructor.
+**show** : shows the grid and disables snap on the grid.
+**hide** : hides the grid and disables snap on the grid.
 
 CHANGELOG
 ---------
