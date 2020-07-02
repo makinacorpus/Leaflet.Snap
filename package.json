@@ -19,11 +19,13 @@
     },
     "license": "MIT",
     "dependencies": {
-        "leaflet": "^0.7.7",
         "leaflet-geometryutil": "*"
     },
+    "peerDependencies": {
+        "leaflet": ">=0.7.0 <2.0.0"
+    },
     "optionalDependencies": {
-        "leaflet-draw": "^0.3.2"
+        "leaflet-draw": "^1.0.0"
     },
     "devDependencies": {
         "chai": "^3.5.0",
