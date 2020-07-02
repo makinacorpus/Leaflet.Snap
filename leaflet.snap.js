@@ -77,6 +77,7 @@ L.Snap.findClosestLayerSnap = function (map, layers, latlng, tolerance, withVert
     
     // code to correct prefer snap to shapes (and their vertices, if withVertices is true) to gridlines and guidelines, and then guidelines to gridlines
     var withinTolerance = [];
+    var pointsWithinTolerance = [];
     var shapesWithinTolerance = [];
     var guidesWithinTolerance = [];
     for (var c=0; c<closest.length; c++) {
@@ -84,7 +85,10 @@ L.Snap.findClosestLayerSnap = function (map, layers, latlng, tolerance, withVert
         if (layerInfo.distance < tolerance) {
             withinTolerance.push(layerInfo);
             
-            if ((! layerInfo.layer.hasOwnProperty('_gridlineGroup')) && (! layerInfo.layer.hasOwnProperty('_guidelineGroup'))) {
+            if (layerInfo.layer.hasOwnProperty('_latlng')) {
+                pointsWithinTolerance.push(layerInfo);
+            }
+            else if ((! layerInfo.layer.hasOwnProperty('_gridlineGroup')) && (! layerInfo.layer.hasOwnProperty('_guidelineGroup'))) {
                 shapesWithinTolerance.push(layerInfo);
             }
             else if (layerInfo.layer.hasOwnProperty('_guidelineGroup')) {
@@ -101,7 +105,13 @@ L.Snap.findClosestLayerSnap = function (map, layers, latlng, tolerance, withVert
     var returnLayer = withinTolerance[0].layer;
     var returnLatLng = withinTolerance[0].latlng;
     
-    if (shapesWithinTolerance.length > 0) {
+    if (pointsWithinTolerance.length > 0) {
+        var pointInfo = pointsWithinTolerance[0];
+        returnLayer = pointInfo.layer;
+        returnLatLng = pointInfo.latlng;
+    }
+    
+    else if (shapesWithinTolerance.length > 0) {
         var shapeInfo = shapesWithinTolerance[0];
         returnLayer = shapeInfo.layer;
         returnLatLng = shapeInfo.latlng;
