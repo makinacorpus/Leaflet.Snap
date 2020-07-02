@@ -23,7 +23,7 @@ In order to use this plugin in your app you can either:
 Usage
 -----
 
-* Add ``leaflet.snap.js`` and ``leaflet.geometryutil.js`` (optionally ``leaflet.draw.js``)
+* Add `leaflet.snap.js` and `leaflet.geometryutil.js` (optionally `leaflet.draw.js`)
 
 ### For markers :
 
@@ -40,7 +40,6 @@ Usage
 ### For Leaflet.Draw :
 
 ```javascript
-
     var guideLayers = [guides, road];
 
     map.drawControl.setDrawingOptions({
@@ -58,7 +57,7 @@ Usage
         polyline.snapediting.enable();
 ```
 
-Both ``L.Handler.MarkerSnap`` and ``L.Handler.PolylineSnap`` accept options as a third
+Both `L.Handler.MarkerSnap` and `L.Handler.PolylineSnap` accept options as a third
 argument.
 
 ### For editing existing polyline with L.EditToolbar.SnapEdit :
@@ -77,7 +76,7 @@ var editToolbar = new L.EditToolbar.SnapEdit(map, {
 editToolbar.enable();
 ```
 
-```L.EditToolbar.SnapEdit``` accepts options and initial guide layers.  
+`L.EditToolbar.SnapEdit` accepts options and initial guide layers.  
 
 ### Options:
 
@@ -97,7 +96,8 @@ Leaflet.Snap.Guidelines
 
 L.Snap.Guidelines ia a class that works with Leaflet Draw to draw horizontal and vertical guidelines along all other existing rectangles and circles when in draw or edit mode, and allows the mouse to snap to those lines, to help the user to draw things that line up perfectly despite their being distance between them. Note that other shapes will always have snapping-prioirty over the guidelines.
 
-```var guideLines = new L.Snap.Guidelines(map, guideLayers, {});
+```javascript
+var guideLines = new L.Snap.Guidelines(map, guideLayers, {});
 ```
 
 ### Options:
@@ -114,10 +114,11 @@ L.Snap.Guidelines ia a class that works with Leaflet Draw to draw horizontal and
 Leaflet.Snap.Gridlines
 ============
 
-```var gridlines = new L.Snap.Gridlines(map, guideLayers, {
-    'pixelSpacingX' : 98,
-    'pixelSpacingY' : 98
-    });
+```javascript
+var gridlines = new L.Snap.Gridlines(map, guideLayers, {
+ 'pixelSpacingX' : 98,
+ 'pixelSpacingY' : 98
+});
 ```
     
 L.Snap.Gridlines draws a grid on the map, and enables L.Snap to snap to its lines. Intersections of NS/WE gridlines will be preferred over sticking to a single line, but other shapes will always have snapping priority over the grid itself. 
