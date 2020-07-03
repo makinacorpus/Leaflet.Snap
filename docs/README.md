@@ -87,6 +87,27 @@ editToolbar.enable();
 CHANGELOG
 ---------
 
+### 0.0.5
+
+* Various bugfixes to allow it to work with L.Draw for Leaflet 1.0
+* Various bugfixes in L.Snap logic
+* Snap now works for all shape types (i.e. polymove, rect, circle, and
+marker, not just polyline/polygon)
+* a new L.Draw.Guidelines class, which extends orthogonal lines to all
+sides of a bounding box during draw/edit for all rectangles and circles
+in drawnLayers
+* requires a bounding box, either a maxbounds on the map or passed in
+options
+* works with snap
+* a new L.Draw.Gridlines class, which draws a grid
+* requires a bounding box, either a maxbounds on the map or passed in
+options
+* can be set by either describing spacing or number of lines in the box,
+in either latlng or pixels
+* works with snap
+* snap will always prefer to snap to drawn features (or their vertices,
+if snapToVerticies is enabled) over Guidelines or Gridlines
+
 ### 0.0.4
 
 * Fix to use leaflet-draw ^0.3.0
