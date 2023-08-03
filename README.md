@@ -1,16 +1,18 @@
 Leaflet.Snap
 ============
 
-Enables snapping of draggable markers to polylines and other layers ! Now updated to work with Leaflet.Draw for Leaflet 1.0!
+Enables snapping of draggable markers to polylines and other layers ! 
+Now updated to work with Leaflet.Draw for Leaflet 1.0!
 
-Check out the [demo](https://makinacorpus.github.io/Leaflet.Snap/) !
+<p align="center">
+<a href="https://www.npmjs.com/package/leaflet-snap"><img alt="npm" src="https://img.shields.io/npm/dt/leaflet-snap"></a>
+<a href="https://www.npmjs.com/package/leaflet-snap"><img alt="npm" src= "https://img.shields.io/npm/v/leaflet-snap?color=red"></a>
+</p>
 
-
-It depends on [Leaflet.GeometryUtil](https://github.com/makinacorpus/Leaflet.GeometryUtil).
-
-For snapping on shape drawing or edition snapping, it also depends on [Leaflet.draw](https://github.com/Leaflet/Leaflet.draw).
-
-If your guide layer contains several thousands for features, adding the [LayerIndex](https://github.com/makinacorpus/Leaflet.LayerIndex) is recommended, this plugin takes advantage of the spatial index if it is available.
+<div class="demo">
+<p align="center"><img src="./screenshot.png"></p>
+<p align="center">Check out the <a href="http://makinacorpus.github.io/Leaflet.Snap/">demo</a> ! </p>
+</div>
 
 Install
 -----
@@ -19,6 +21,14 @@ In order to use this plugin in your app you can either:
     * `npm i leaflet-snap`
     * `bower install git@github.com:makinacorpus/Leaflet.Snap.git`
 * download the repository and import the `leaflet.snap.js` file in your app.
+
+Dependencies
+-----
+It depends on [Leaflet.GeometryUtil](https://github.com/makinacorpus/Leaflet.GeometryUtil).
+
+For snapping on shape drawing or edition snapping, it also depends on [Leaflet.draw](https://github.com/Leaflet/Leaflet.draw).
+
+If your guide layer contains several thousands for features, adding the [LayerIndex](https://github.com/makinacorpus/Leaflet.LayerIndex) is recommended, this plugin takes advantage of the spatial index if it is available.
 
 Usage
 -----
