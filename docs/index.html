@@ -1,190 +1,98 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Leaflet.Snap</title>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
-    <link rel="stylesheet" href="./leaflet.draw.css" />
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
-    <script src="./leaflet.draw.js"></script>
-    <script src="./leaflet.geometryutil.js"></script>
-
-    <script src="./leaflet.snap.js"></script>
-    <style>
-        #map {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-        }
-        
-        .help {
-            font-size: 1.5em;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 30px;
-            z-index: 10;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            padding: 10px;
-            margin: 0px;
-            text-align: center;
-        }
-        
-        .help a.sources {
-            float: left;
-            margin-left: 50px;
-            color: white;
-        }
-        
-        .help a.logo {
-            float: right;
-        }
-        
-        .help a.logo img {
-            height: 30px;
-        }
-        
-        .leaflet-editing-icon.marker-snapped {
-            background-color: yellow;
-        }
-        
-        .leaflet-marker-icon.marker-snapped {
-            content: url('marker-snap.png');
-        }
-    </style>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+    <header>
+        <h1 class="demo-name"></h1>
+        <div class="menu">
+            <a class="npm"><img class="icon" src="./logo/npm.svg" />
+                <div class="title"></div>
+            </a>
+            <a class="sources"><img class="icon" src="./logo/github.svg" />
+                <div class="title">Github</div>
+            </a>
+            <a class="logo" href="http://makina-corpus.com"><img class="logo" src="./logo/makina.svg"
+                    alt="Makina Corpus logo" /></a>
+            <button class="menu-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+        </div>
+    </header>
+    <main>
+        <iframe id="demoIframe" title="Demo Iframe" width="100%" height="100%" src="./example.html">
+        </iframe>
+        <aside class="side closed">
+            <zero-md>
+                <!-- Set `data-dedent` to remove indentation -->
+                <script class= "moreInfo" type="text/markdown" data-dedent>
+                </script>
+                <template>
+                    <link rel="stylesheet"
+                        href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown.min.css" />
+                </template>
+            </zero-md>
+            <h1>Description</h1>
+            <zero-md class="readme-md">
+                <template>
+                    <style>
+                        h1 {
+                            display: none;
+                        }
 
-    <p class="help">Move stuff around and it will snap !
-        <a class="sources" href="http://github.com/makinacorpus/Leaflet.Snap/">Sources</a>
-        <a class="logo" href="http://makina-corpus.com"><img src="http://depot.makina-corpus.org/public/logo.gif" /></a>
-    </p>
-    <div id="map"></div>
+                        h2,
+                        h3 {
+                            margin-top: 10px !important;
+                            padding: 0.7px !important;
+                            margin-left: 5px !important;
+                            line-height: 1.2 !important;
+                        }
 
-    <script type="text/javascript">
-        var osm = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: 'Map data &copy; 2013 OpenStreetMap contributors',
-        });
+                        p {
+                            margin-left: 4px !important;
+                        }
 
-        var map = L.map('map', {
-                drawControl: true
-            })
-            .setView([48.49, 1.4], 16)
-            .addLayer(osm);
-
-        var guides = L.polyline([
-            [48.505431207150885, 1.3999843597412107],
-            [48.50335551764662, 1.398911476135254],
-            [48.50173471468476, 1.3994693756103516],
-            [48.49974418399956, 1.3991689682006836],
-            [48.49684355649577, 1.3993835449218748],
-            [48.4956206932084, 1.398611068725586],
-            [48.49465375716902, 1.3980531692504883],
-            [48.49419872206354, 1.3975811004638672],
-            [48.492406981637345, 1.3971948623657227],
-            [48.49156797030711, 1.396486759185791],
-            [48.49067206152607, 1.3961219787597656],
-            [48.48988, 1.39638],
-            [48.489342389949364, 1.394963264465332],
-            [48.48864554279267, 1.3944590091705322],
-            [48.487628697617744, 1.3940191268920896],
-            [48.485666057669334, 1.3944482803344727],
-            [48.48541005555473, 1.3942551612854002],
-            [48.48461359626773, 1.3942766189575195],
-            [48.483489998505746, 1.3933539390563965],
-            [48.48164098598135, 1.3928818702697754],
-            [48.480232846617845, 1.3912296295166016],
-            [48.479450530080534, 1.3906073570251463],
-            [48.478511734309954, 1.3902640342712402],
-            [48.47714618217502, 1.389319896697998],
-            [48.47600819398379, 1.388998031616211]
-        ], {
-            weight: 5,
-            color: 'red',
-            opacity: 1.0
-        }).addTo(map);
-
-        var marker = L.marker([48.488, 1.395]).addTo(map);
-        marker.snapediting = new L.Handler.MarkerSnap(map, marker);
-        marker.snapediting.addGuideLayer(guides);
-        marker.snapediting.enable();
-
-        var road = L.polyline([
-            [48.48922, 1.40033],
-            [48.48935, 1.39981],
-            [48.48948, 1.3976],
-            [48.48986, 1.39634]
-        ], {
-            color: 'green',
-            opacity: 1.0
-        }).addTo(map);
-
-        road.snapediting = new L.Handler.PolylineSnap(map, road);
-        road.snapediting.addGuideLayer(guides);
-        road.snapediting.enable();
-
-        marker.snapediting.addGuideLayer(road);
-
-        for (var m in road.snapediting._verticesHandlers[0]._markerGroup._layers) {
-            road.snapediting._verticesHandlers[0]._markerGroup._layers[m].fire('move');
-        }
-
-        var road2 = L.polyline([
-                [48.48782, 1.39409],
-                [48.48794, 1.39267],
-                [48.48801, 1.39175],
-                [48.48809, 1.39094],
-                [48.48802, 1.39073]
-            ], {
-                color: 'blue',
-                opacity: 1
-            })
-            .addTo(map);
-
-        marker.snapediting.addGuideLayer(road2);
-        road.snapediting.addGuideLayer(road2);
-
-        var snapEdit = new L.EditToolbar.SnapEdit(map, {
-            featureGroup: L.featureGroup([road2]),
-            snapOptions: {
-                guideLayers: [guides]
-            }
-        });
-
-        // Enable edit from the EditToolBar idem
-        // snapEdit.enable();
-
-        var guideLayers = [guides, road, road2];
-
-        map.drawControl.setDrawingOptions({
-            polyline: {
-                guideLayers: guideLayers
-            },
-            polygon: {
-                guideLayers: guideLayers,
-                snapDistance: 5
-            },
-            marker: {
-                guideLayers: guideLayers,
-                snapVertices: false
-            },
-            rectangle: false,
-            circle: false
-        });
-
-        map.on('draw:created', function(e) {
-            var layer = e.layer;
-            map.addLayer(layer);
-            guideLayers.push(layer);
-        });
-    </script>
+                        .demo {
+                            display: none;
+                        }
+                    </style>
+                    <link rel="stylesheet"
+                        href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown.min.css" />
+                    <link rel="stylesheet"
+                        href="https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.9.0/prism-dracula.min.css" />
+                </template>
+            </zero-md>
+        </aside>
+    </main>
 </body>
+<script type="module" src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@2/dist/zero-md.min.js"></script>
+<script>
+    function toggleMenu() {
+        var toggle = document.querySelector('.menu-toggle');
+        var menu = document.querySelector('.side');
+        toggle.classList.toggle('close');
+        menu.classList.toggle('closed');
+    }
+
+    function initMenu() {
+        var toggle = document.querySelector('.menu-toggle');
+        toggle.addEventListener('click', toggleMenu);
+    }
+
+    window.addEventListener('load', function () {
+        initMenu();
+    });
+</script>
+<script src="meta.js"></script>
 
 </html>
