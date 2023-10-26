@@ -324,7 +324,7 @@ L.Handler.MarkerSnap = L.Handler.extend({
     _snapMarker: function(e) {
         var closest = L.Snap.snapMarker(e, this._guides, this._map, this.options, this._buffer);
         
-        if (e.originalEvent && e.originalEvent.clientX && closest.layer && closest.latlng) {
+        if (e.originalEvent && e.originalEvent.clientX && closest && closest.layer && closest.latlng) {
             var snapTouchPoint = this._map.project(closest.latlng, this._map.getZoom());
             e.originalEvent.clientX = snapTouchPoint.x;
             e.originalEvent.clientY = snapTouchPoint.y;

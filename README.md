@@ -145,6 +145,9 @@ L.Snap.Gridlines draws a grid on the map, and enables L.Snap to snap to its line
 CHANGELOG
 ---------
 
+### 0.0.6
+* Fix onMove handler when closest is null
+
 ### 0.0.4
 
 * Fix to use leaflet-draw ^0.3.0
