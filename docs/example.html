@@ -11,7 +11,7 @@
     <script src="./leaflet.draw.js"></script>
     <script src="./leaflet.geometryutil.js"></script>
 
-    <script src="./leaflet.snap.js"></script>
+    <script src="../leaflet.snap.js"></script>
     <style>
         #map {
             position: absolute;
@@ -35,37 +35,10 @@
             margin: 0px;
             text-align: center;
         }
-        
-        .help a.sources {
-            float: left;
-            margin-left: 50px;
-            color: white;
-        }
-        
-        .help a.logo {
-            float: right;
-        }
-        
-        .help a.logo img {
-            height: 30px;
-        }
-        
-        .leaflet-editing-icon.marker-snapped {
-            background-color: yellow;
-        }
-        
-        .leaflet-marker-icon.marker-snapped {
-            content: url('marker-snap.png');
-        }
     </style>
 </head>
 
 <body>
-
-    <p class="help">Move stuff around and it will snap !
-        <a class="sources" href="http://github.com/makinacorpus/Leaflet.Snap/">Sources</a>
-        <a class="logo" href="http://makina-corpus.com"><img src="http://depot.makina-corpus.org/public/logo.gif" /></a>
-    </p>
     <div id="map"></div>
 
     <script type="text/javascript">
