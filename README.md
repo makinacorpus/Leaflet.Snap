@@ -10,7 +10,6 @@ Now updated to work with Leaflet.Draw for Leaflet 1.0!
 </p>
 
 <div class="demo">
-<p align="center"><img src="./screenshot.png"></p>
 <p align="center">Check out the <a href="https://makinacorpus.github.io/Leaflet.Snap/">demo</a> ! </p>
 </div>
 
