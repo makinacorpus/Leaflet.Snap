@@ -102,6 +102,17 @@ editToolbar.enable();
 CHANGELOG
 ---------
 
+### 0.0.6
+
+* Fix a crash in marker snapping when no guide is close (#68, thanks danyhoron)
+
+### 0.0.5
+
+* Leaflet is now a peer dependency (`>=0.7.0 <2.0.0`), Leaflet.draw is optional (`^1.0.0`)
+* Various bugfixes to work with Leaflet.draw for Leaflet 1.0
+* Snap works for all shape types (polyline, polygon, rectangle, circle and marker)
+* Prefer snapping to points over lines or polygons
+
 ### 0.0.4
 
 * Fix to use leaflet-draw ^0.3.0
